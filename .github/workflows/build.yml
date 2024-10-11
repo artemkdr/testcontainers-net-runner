@@ -1,0 +1,12 @@
+name: "Build .NET"
+
+on: 
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build-net:
+    uses: ./.github/workflows/build-net.yml
+    with:
+      runner: "'ubuntu-latest'"
+      dotnet-version: '6.0.x'  

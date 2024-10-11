@@ -1,0 +1,40 @@
+# This workflow builds .net project and runs the tests,
+# The workflow has to be called from another one
+# Parameters:
+#   runner - which runner to use, default is "'ubuntu-latest'"
+#   dotnet-version - a .net version, default is "6.0.x"
+name: "Build: .NET"
+
+on:   
+  workflow_call:
+    inputs:
+      runner:
+        type: string
+        # examples: "'ubuntu-latest'", "'self-hosted'", "['self-hosted', 'windows', 'x64']"
+        default: "['ubuntu-latest']" 
+      dotnet-version:
+        type: string
+        default: '6.0.x'
+  
+jobs:
+  build:
+    # inputs.runner MUST BE json-friendly
+    runs-on: ${{fromJSON(inputs.runner)}}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ inputs.dotnet-version }}
+          
+    - name: Restore Dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release --no-restore
+        
+    - name: Run Tests
+      run: dotnet test

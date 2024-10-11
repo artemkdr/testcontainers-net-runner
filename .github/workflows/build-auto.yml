@@ -1,0 +1,21 @@
+# This workflow runs automatically on push/pull_request on main branch
+# it calls build.yml workflow in the same directory
+name: "Build automatically"
+
+on:
+  push:
+    branches: [ "main" ]
+    paths-ignore:
+      - '.github/workflows/**'
+      - '!.github/workflows/build.yml'
+      - '**/readme.md'
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - '.github/workflows/**'
+      - '!.github/workflows/build.yml'
+      - '**/readme.md'
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+  
